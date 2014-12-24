@@ -207,7 +207,7 @@ function! unite#libs#svn#diff#new()
             call add(l:data, {
 \               'word'      : 'no different or some error has occured',
 \               'source'    : a:source,
-\               'kind'      : 'common',             
+\               'kind'      : 'common',
 \               'action__path'  : '',
 \               'action__line'  : 0,
 \           })

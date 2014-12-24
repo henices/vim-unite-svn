@@ -48,7 +48,13 @@ let s:symbol_tables = [
 \   },
 \   {
 \       ' ' : '',
-\       '*' : '*',
+\       'C' : 'tree-Conflicted'
+\   },
+\   {
+\   },
+\   {
+\       ' ' : '',
+\       '*' : 'Updated',
 \   },
 \]
 "}}}
@@ -58,7 +64,7 @@ function! s:str2list(str)
 endfunction
 
 function! s:get_lines()
-    return s:str2list(system('svn st'))
+    return s:str2list(system('svn st -u'))
 endfunction
 
 function! s:get_label_of(column, symbol)
@@ -71,19 +77,20 @@ endfunction
 
 "{{{ line pattern
 function! s:line_pattern()
-    let l:pattern
-\       = '\m^'
-\       . join(
-\           map(range(0, len(s:symbol_tables) - 1), '
-\               ''\([''
-\             . join(s:get_symbols_of(v:val), "")
-\             . '']\)''
-\           '),
-\           ''
-\       )
-\       . '\s\{}'
-\       . '\(.\+\)'
-\       . '$'
+"    let l:pattern
+"\       = '\m^'
+"\       . join(
+"\           map(range(0, len(s:symbol_tables) - 1), '
+"\               ''\([''
+"\             . join(s:get_symbols_of(v:val), "")
+"\             . '']\)''
+"\           '),
+"\           ''
+"\       )
+"\       . '\s\{}'
+"\       . '\(.\+\)'
+"\       . '$'
+    let l:pattern = '\m^\([ ARCD!XIM~?]\)\([ CM]\)\([ L]\)\([ +]\)\([ S]\)\([ BTKO]\)\([ C]\).\([ \*]\)\s\+\d*\s\+\(.\+\)$'
     return l:pattern
 endfunction
 
@@ -105,10 +112,24 @@ function! s:get_data_list()
 endfunction
 
 function! s:gen_data_by(list)
-    return {
-\       'change'    : s:get_label_of(0, a:list[1]),
-\       'path'      : a:list[8],
-\   }
+
+    if a:list[5] != ' '
+        return {
+    \       'change'    : s:get_label_of(4, a:list[5]),
+    \       'path'      : a:list[9],
+    \   }
+    endif
+    if a:list[8] == ' '
+        return {
+    \       'change'    : s:get_label_of(0, a:list[1]),
+    \       'path'      : a:list[9],
+    \   }
+    else
+        return {
+    \       'change'    : s:get_label_of(8, a:list[8]),
+    \       'path'      : a:list[9],
+    \   }
+    endif
 endfunction
 
 function! unite#libs#svn#status#new()

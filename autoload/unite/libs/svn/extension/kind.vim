@@ -11,6 +11,14 @@ set cpo&vim
 
 let s:extension_list    = []
 
+let s:svn_update = {
+\   'description'   : 'svn update this position',
+\   'is_selectable' : 1,
+\}
+function! s:svn_update.func(candidates)
+    execute '! svn up '
+\         . join(map(a:candidates, 'v:val.action__path'))
+endfunction
 let s:svn_commit    = {
 \   'description'   : 'svn commit this position',
 \   'is_selectable' : 1,
@@ -77,6 +85,14 @@ endfunction
 function! unite#libs#svn#extension#kind#define()
 
     "{{{ kind
+    "{{{ svn update
+    call unite#custom_action('source/svn/status/jump_list',
+    \                        'update',
+    \                        s:svn_update)
+    call unite#custom_alias('source/svn/status/jump_list',
+    \                        'up',
+    \                        'update')
+    "}}}
     "{{{ svn commit
     call unite#custom_action('source/svn/status/jump_list',
     \                        'commit',
