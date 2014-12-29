@@ -90,7 +90,7 @@ function! s:line_pattern()
 "\       . '\s\{}'
 "\       . '\(.\+\)'
 "\       . '$'
-    let l:pattern = '\m^\([ ARCD!XIM~?]\)\([ CM]\)\([ L]\)\([ +]\)\([ S]\)\([ BTKO]\)\([ C]\).\([ \*]\)\s\+[\d\-]*\s\+\(.\+\)$'
+    let l:pattern = '\m^\([ ARCD!XIM~?]\)\([ CM]\)\([ L]\)\([ +]\)\([ S]\)\([ BTKO]\)\([ C]\).\([ \*]\)\s\+[0-9\-]*\s\+\(.\+\)$'
     return l:pattern
 endfunction
 
